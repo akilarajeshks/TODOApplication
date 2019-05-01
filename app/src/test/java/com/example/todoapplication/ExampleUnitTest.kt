@@ -34,6 +34,23 @@ class ExampleUnitTest {
         val secondValue = todoViewModel.todoList.value
         assert(secondValue!!.size==2)
         assert(secondValue.last()==secondTodo)
+    }
 
+    @Test
+    fun clearAllTest(){
+        val todoViewModel = TODOViewModel()
+        assert(todoViewModel.todoList.value!!.isEmpty())
+
+        val todoItem = "item one"
+        todoViewModel.addTodoItem(todoItem)
+
+        val value = todoViewModel.todoList.value
+        assert(value!!.size==1)
+        assert(value[0] == todoItem)
+
+        todoViewModel.clearAllTodo()
+
+        val valueAfterClearing = todoViewModel.todoList.value
+        assert(valueAfterClearing!!.isEmpty())
     }
 }

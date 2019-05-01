@@ -14,4 +14,8 @@ class TODOViewModel : ViewModel() {
         mutableList.add(todo)
         todoList.postValue(mutableList)
     }
+
+    fun clearAllTodo(){
+        todoList.postValue(mutableListOf())
+    }
 }
