@@ -25,6 +25,8 @@ class TODOListFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_todolist, container, false)
     }
 
+
+
     override fun onStart() {
         super.onStart()
 
@@ -32,6 +34,10 @@ class TODOListFragment : Fragment() {
 
         add_fab.setOnClickListener {
             findNavController().navigate(R.id.action_TODOListFragment_to_addNewFragment)
+        }
+
+        clear_all_btn.setOnClickListener {
+            todoViewModel.clearAllTodo()
         }
 
         recycler_todo.apply {
@@ -44,6 +50,8 @@ class TODOListFragment : Fragment() {
         todoViewModel.todoList.observe(this, Observer {
             (recycler_todo.adapter as TodoRecyclerAdapter).loadTodoList(it)
             recycler_todo.adapter!!.notifyDataSetChanged()
+
+            clear_all_btn.isEnabled = it.isNotEmpty()
         })
 
     }

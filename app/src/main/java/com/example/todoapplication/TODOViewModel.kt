@@ -11,8 +11,10 @@ class TODOViewModel : ViewModel() {
     fun addTodoItem(todo: String) {
         val list = todoList.value
         val mutableList = list!!.toMutableList()
-        mutableList.add(todo)
-        todoList.postValue(mutableList)
+        if (todo.isNotEmpty()) {
+            mutableList.add(todo)
+            todoList.postValue(mutableList)
+        }
     }
 
     fun clearAllTodo(){

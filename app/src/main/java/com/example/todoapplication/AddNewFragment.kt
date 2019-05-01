@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_add_new.*
 
 class AddNewFragment : Fragment() {
 
-    lateinit var todoViewModel: TODOViewModel
+    private lateinit var todoViewModel: TODOViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,9 +26,11 @@ class AddNewFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        todo_text.setOnFocusChangeListener { _, hasFocus ->
+                showKeyboard(hasFocus)
+        }
 
         todo_text.requestFocus()
-        showKeyboard()
         todoViewModel = ViewModelProviders.of(this.activity!!)[TODOViewModel::class.java]
 
         add_btn.setOnClickListener {
@@ -39,17 +41,18 @@ class AddNewFragment : Fragment() {
 
     private fun addTodoItem() {
         todo_text.clearFocus()
-        closeKeyboard()
         todoViewModel.addTodoItem(todo_text.text.toString())
     }
 
-    private fun showKeyboard() {
+    private fun showKeyboard(hasFocus: Boolean) {
         val inputMethodManager = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-    }
-
-    private fun closeKeyboard() {
-        val inputMethodManager = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+        if (hasFocus) {
+            todo_text.postDelayed(
+                { inputMethodManager.showSoftInput(todo_text, 0) },
+                200
+            )
+        } else {
+            inputMethodManager.hideSoftInputFromWindow(todo_text.windowToken, 0)
+        }
     }
 }
